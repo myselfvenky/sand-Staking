@@ -1,11 +1,13 @@
 import { flexbox, styled } from "@mui/system";
-
+import styles from './components/home.module.css'
 import Header from "./components/Header";
 import BakeCard from "./components/BakeCard";
+import { RiMenu4Fill } from "react-icons/ri"
 import NutritionFacts from "./components/NutritionFacts";
 import ReferralLink from "./components/ReferralLink";
 import { useWallet } from "@solana/wallet-adapter-react";
 import Footer from "./components/Footer";
+import bckimg from "../assets/background.webp"
 import {
   Table,
   TableBody,
@@ -18,18 +20,26 @@ import {
   WalletConnectButton
 } from '@solana/wallet-adapter-material-ui';
 import { ToastContainer } from 'react-toastify';
+
+import backgroundImg from '../assets/background.webp';
 import 'react-toastify/dist/ReactToastify.css';
 
 
-import backgroundImg from '../assets/background.png';
+// import backgroundImg from '../assets/background.png';
 
 const Wrapper = styled("div")(({ theme }) => ({
+  
   position: 'relative',
-  maxWidth: 500,
-  margin: "0 auto",
+  margin: "0",
+  width: "75%", // Default width
+
   [theme.breakpoints.down("sm")]: {
-    maxWidth: "100%",
+    width: "100%",
   },
+
+  // [theme.breakpoints.between("715px", "1920px")]: {
+  //   width: "75% !important",
+  // },
 }));
 
 const WalletButton = styled("div")(() => ({
@@ -40,10 +50,23 @@ const WalletButton = styled("div")(() => ({
 export default function Home() {
   //const { address } = useAuthContext();
   const wallet = useWallet();
+  const NavOpenClosefn = () => {
 
+    const element = document.getElementById("nav")
+    const width = "80%";
+    if (element.style.width === width) {
+        element.style.width = "0%"
+
+    } else {
+        element.style.width = width;
+    }
+}
   return (
-    <div>
+    <div style={{display:"flex" , justifyContent:"end" ,backgroundImage:`url(${backgroundImg})`,
+    backgroundPosition:"center",
+    backgroundSize:"cover",}}>
       <Wrapper>
+      <RiMenu4Fill className={styles.burger} onClick={NavOpenClosefn} />
           <WalletButton>
             <MaterialUIWalletMultiButton variant="text" style={{
               border: "5px solid black",
@@ -53,9 +76,10 @@ export default function Home() {
               color: 'black'
             }}/>
           </WalletButton>
+         
           <Header />
           <BakeCard />
-          <NutritionFacts />
+          {/* <NutritionFacts /> */}
           <ReferralLink address={wallet.publicKey && wallet.publicKey.toBase58()} />
           <Footer />
           <ToastContainer

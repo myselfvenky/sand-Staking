@@ -30,12 +30,12 @@ export const Wallets = ({children}) => {
     () => [
       getPhantomWallet(),
       getSolflareWallet(),
-      getTorusWallet({
-        options: {
-          clientId:
-            'BOM5Cl7PXgE9Ylq1Z1tqzhpydY0RVr8k90QQ85N7AKI5QGSrr9iDC-3rvmy0K_hF0JfpLMiXoDhta68JwcxS1LQ'
-        }
-      }),
+      // getTorusWallet({
+      //   options: {
+      //     clientId:
+      //       'BOM5Cl7PXgE9Ylq1Z1tqzhpydY0RVr8k90QQ85N7AKI5QGSrr9iDC-3rvmy0K_hF0JfpLMiXoDhta68JwcxS1LQ'
+      //   }
+      // }),
       getLedgerWallet(),
       getSolongWallet(),
       getMathWallet(),

@@ -8,7 +8,7 @@ import Button from "@mui/material/Button";
 import LinearProgress from "@mui/material/LinearProgress";
 import Divider from "@mui/material/Divider";
 import { styled } from "@mui/system";
-
+import styles from "./home.module.css"
 import { useLocation } from "react-router-dom";
 import { useContractContext } from "../../providers/ContractProvider";
 import { useWallet } from "@solana/wallet-adapter-react";
@@ -16,6 +16,7 @@ import PriceInput from "../../components/PriceInput";
 import { useEffect, useState } from "react";
 import { config } from "../../config";
 import { buyEggs, sellEggs, hatchEggs, initialize } from "../../contracts/bean";
+import { PublicKey } from "@solana/web3.js";
 
 import {
   getWalletSolBalance,
@@ -54,7 +55,8 @@ export default function BakeCard() {
   const [loading, setLoading] = useState(false);
   const query = useQuery();
   const wallet = useWallet();
-
+  const [sand, setSand] = useState(0)
+  const [mysol, setMysol] = useState(0)
   const [minersCount, setMinersCount] = useState("0");
   const [beanRewards, setBeanRewards] = useState("0");
   const [walletSolBalance, setWalletSolBalance] = useState("0");
@@ -105,7 +107,8 @@ export default function BakeCard() {
   };
   const getRef = () => {
     const ref = query.get("ref");
-    return ref;
+    if (ref === null) return null;
+    return new PublicKey(ref);
   };
   
   const initializeProgram = async () => {
@@ -164,19 +167,37 @@ export default function BakeCard() {
   };
 
   return (
+    <div>
+    <div className={styles.head} style={{fontWeight:"2px"}}>
+    <h1>SAND STAKING</h1>
+</div>
+<div className={styles.card_cont}>
+    <div className={styles.card} style={{width:"100%"}}>
+        <h2>Contract</h2>
+        <h3>{contractSolBalance} SOL</h3>
+    </div>
+    <div className={styles.card } style={{width:"100%"}}>
+        <h2>Wallet</h2>
+        <h3>{walletSolBalance} SOL</h3>
+    </div>
+    <div className={styles.card} style={{width:"100%"}}>
+        <h2>Your SAND</h2>
+        <h3>{minersCount} SAND</h3>
+    </div>
+</div>
     <CardWrapper>
       {loading && <LinearProgress color="secondary" />}
       <CardContent>
-        <UnderlinedGrid
+      {/* <UnderlinedGrid
           container
           justifyContent="space-between"
           alignItems="center"
           mt={3}
         >
           <Typography variant="body1">Contract</Typography>
-          <Typography variant="h5">{contractSolBalance} SOL</Typography>
-        </UnderlinedGrid>
-        <UnderlinedGrid
+          <Typography variant="h5"></Typography>
+        </UnderlinedGrid> */}
+        {/* <UnderlinedGrid
           container
           justifyContent="space-between"
           alignItems="center"
@@ -184,24 +205,40 @@ export default function BakeCard() {
         >
           <Typography variant="body1">Wallet</Typography>
           <Typography variant="h5">{walletSolBalance} SOL</Typography>
-        </UnderlinedGrid>
-        <UnderlinedGrid
+        </UnderlinedGrid> */}
+        {/* <UnderlinedGrid
           container
           justifyContent="space-between"
           alignItems="center"
           mt={3}
         >
-          <Typography variant="body1">Your Beans</Typography>
-          <Typography variant="h5">{minersCount} BEANS</Typography>
-        </UnderlinedGrid>
+          <Typography variant="body1">Your SAND</Typography>
+          <Typography variant="h5">{minersCount} SAND</Typography>
+        </UnderlinedGrid> */}
+        
+      <div className={styles.section} style={{display:"flex" , contain:""}}>
+                        <div className={styles.section_head}>Stake</div>
+                        <div className={styles.bal_card}> Balance:{walletSolBalance} SOL </div>
+                        <input type="number" placeholder="Enter Amount"
+                            onChange={(e) => setSand(e.target.value)}
+                            className={styles.in}
+
+                        />
+                        <button className={styles.buy_btn}
+                        disabled={!address || +sand <= 0 || loading}
+                        onClick={bake}
+                        >Buy {sand} SAND</button>
+
+                    </div>
+
         <Box paddingTop={4} paddingBottom={3}>
-          <Box>
+          {/* <Box>
             <PriceInput
               max={+walletSolBalance}
               value={bakeSOL}
               onChange={(value) => onUpdateBakeSOL(value)}
             />
-          </Box>
+          </Box> */}
           
           <Box marginTop={3} marginBottom={3}>
             <Button
@@ -215,7 +252,7 @@ export default function BakeCard() {
             </Button>
           </Box>
 
-          <Box marginTop={3} marginBottom={3}>
+          {/* <Box marginTop={3} marginBottom={3}>
             <Button
               variant="contained"
               fullWidth
@@ -225,49 +262,38 @@ export default function BakeCard() {
             >
               ROAST BEANS
             </Button>
-          </Box>
+          </Box> */}
           <Divider />
-          <Grid
+
+          <div className={styles.section}>
+                        <div className={styles.section_head}>Claim</div>
+                        <div className={styles.data}>{beanRewards} SOL</div>
+                        <div>
+                        <button className={styles.buy_btn} disabled={!address || loading}
+                onClick={reBake}>Compound</button>
+                            <button className={styles.buy_btn} disabled={!address || loading}
+                onClick={eatBeans}>Claim Rewards</button>
+                        </div>
+
+                    </div>
+                    
+          {/* <Grid
             container
             justifyContent="space-between"
             alignItems="center"
             mt={3}
           >
             <Typography variant="body1" fontWeight="bolder">
-              Your Rewards
+              Claim
             </Typography>
             <Typography variant="h5" fontWeight="bolder">
               {beanRewards} SOL
             </Typography>
-          </Grid>
-          <ButtonContainer container>
-            <Grid item flexGrow={1} marginRight={1} marginTop={3}>
-              <Button
-                variant="contained"
-                color="secondary"
-                fullWidth
-                disabled={!address || loading}
-                onClick={reBake}
-                className="custom-button"
-              >
-                DARK ROAST
-              </Button>
-            </Grid>
-            <Grid item flexGrow={1} marginLeft={1} marginTop={3}>
-              <Button
-                variant="contained"
-                color="secondary"
-                fullWidth
-                disabled={!address || loading}
-                onClick={eatBeans}
-                className="custom-button"
-              >
-                BREW COFFEE
-              </Button>
-            </Grid>
-          </ButtonContainer>
+          </Grid> */}
+          
         </Box>
       </CardContent>
     </CardWrapper>
+    </div>
   );
 }

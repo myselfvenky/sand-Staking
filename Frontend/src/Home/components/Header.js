@@ -1,7 +1,7 @@
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/system";
 import logo from "../../assets/FullLogo.png";
-
+import styles from './home.module.css'
 const Wrapper = styled("div")(({ theme }) => ({
   textAlign: "center",
   paddingBottom: 24,
@@ -16,11 +16,12 @@ const Wrapper = styled("div")(({ theme }) => ({
 export default function Header() {
   return (
     <Wrapper>
-      <img src={logo} alt="" width={"70%"} />
+      {/* <img src={logo} alt="" width={"70%"} />
       <hr />
       <Typography variant="h7" marginTop={-3}>
         <b>The SOL reward pool with the richest daily return and lowest dev fee</b>
-      </Typography>
+      </Typography> */}
+       
     </Wrapper>
   );
 }
